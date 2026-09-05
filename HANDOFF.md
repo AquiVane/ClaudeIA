@@ -1,6 +1,6 @@
 # HANDOFF — IA de COSMART (ia.cosmart.com.ar)
 
-Actualizado: 2026-09-05. Todavía no hay código — este archivo tiene el pedido original de Vaneh más una segunda vuelta de requisitos/decisiones de la misma fecha. Leer todo antes de tocar nada.
+Actualizado: 2026-09-05. Ya hay un primer scaffolding de código (login + subida de fotos/video/audio a R2, ver sección "Novedades 05/09 (séptima vuelta)" al final). Leer todo antes de tocar nada.
 
 ## Novedades 05/09 (segunda vuelta, antes de codear nada)
 
@@ -75,6 +75,46 @@ Vaneh avisó que no tiene plata disponible ahora para pagar Runpod y correr la p
 También encontrado como opción para cuando haga falta probar código propio (no solo las demos): **Modal.com da $30/mes gratis en crédito de cómputo** (~12hs de GPU clase A100), sin poner un peso.
 
 **Pendiente**: que Vaneh (o Ger) prueben Wan2.2-S2V y daVinci-MagiHuman con la misma foto/audio en las demos oficiales y comparen resultado, antes de gastar nada en Runpod.
+
+## Novedades 05/09 (séptima vuelta) — primer scaffolding real: login + subida a R2, y branding definido
+
+### Branding — NO usar la estética estándar de COSMART
+
+⚠️ **Pedido explícito de Vaneh: el visual de este proyecto NO tiene que parecerse a COSMART "de fábrica".** La referencia más cercana que dio es **MPG** (`mpg.cosmart.com.ar`), pero quiere una mezcla entre ese branding y el de COSMART, no una copia de MPG tampoco.
+
+Se investigó el código real (no se inventó nada):
+- **MPG**: paleta verde-menta/turquesa (`--verde:#3EC0A8`, fondo oscuro `#0d2e29`, fondo claro `#f0faf8`), tipografías **DM Sans** (texto) + **Bricolage Grotesque** (títulos/botones), botones redondeados — estética "producto de IA moderno".
+- **COSMART madre** (cosmart.com.ar, ej. `auditoria-de-marketing.html`): paleta navy (`#091C47`/`#0D2B6B`) + celeste (`#3A8FC7`) + rojo (`#E02020`), más corporativo.
+
+**Decisión aplicada**: estructura/tipografías/botones redondeados de MPG (DM Sans + Bricolage Grotesque) + navy/celeste de COSMART como color principal (`--navy:#091C47`, `--navy2:#0D2B6B`, `--celeste:#3A8FC7`) en vez del verde-menta de MPG, con el rojo de COSMART (`#E02020`) reservado solo como acento de error/alerta. **No confirmado explícitamente por Vaneh todavía** — se avisó que se iba a construir así y se sigue esperando feedback una vez que lo vea armado (más fácil opinar sobre algo real que sobre texto). Si pide cambios de paleta, es la primera cosa a revisar.
+
+### Recursos de Cloudflare creados (vía API, cuenta real de Vaneh)
+
+- KV `IA_USERS` (id `1c71e0ffa3ec42b08718c595f8beae32`) — cuentas de usuario.
+- KV `IA_SESSIONS` (id `a82cdf114eeb431ea6e310c8da8629e3`) — tokens de sesión, TTL nativo de 30 días.
+- R2 `cosmart-ia-perfiles` — fotos/videos/audios de cada perfil.
+- Worker todavía **NO desplegado** — el código está en este repo (`src/index.js`, `wrangler.toml`) pero falta correr el deploy (ver pendientes abajo). Nombre elegido para el worker: `cosmart-ia`.
+
+No se creó base de datos D1 — se decidió usar solo KV (mismo patrón ya probado en `marketing-hub`/`euforia-worker`: password hasheado con HMAC-SHA256+salt, sesión con Bearer token) porque alcanza de sobra para 2 usuarios y es consistente con el resto del ecosistema. Si más adelante hace falta trackear cuotas/generaciones de forma más relacional (usuarios pagos externos), ahí sí conviene sumar D1 — no es necesario todavía.
+
+### Qué hace el código actual
+
+- `POST /api/setup` — crea una cuenta (protegido por `SETUP_SECRET`, pensado para las 2 cuentas iniciales de Vaneh/Ger, no es un registro público).
+- `POST /api/login` / `POST /api/logout` / `GET /api/me` — auth con Bearer token.
+- `GET /api/archivos`, `POST /api/archivos` (multipart, campos `tipo` + `archivo`), `GET /api/archivos/:id/contenido`, `DELETE /api/archivos/:id` — cada usuario solo ve/sube/borra sus propios archivos, **incluso entre dos admins nunca se comparte el perfil** (regla ya acordada).
+- Frontend: `login.html`, `perfil.html` (3 secciones: fotos/videos/audios, con el copy de cantidad/variedad ya definido en las vueltas anteriores de esta charla), `index.html` (redirect según haya sesión guardada).
+- El Worker sirve tanto la API (`/api/*`) como los archivos estáticos de `public/` (usando el binding `[assets]` de Wrangler) — un solo deploy, sin repo de frontend separado.
+
+### Pendientes para que esto funcione en producción (ninguno hecho todavía)
+
+1. **Configurar secrets del repo en GitHub** (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`) para que corra `.github/workflows/deploy.yml` — puede que Vaneh ya los tenga cargados a nivel organización desde `cosmart-workers`, verificar antes de pedírselos de nuevo.
+2. **Cargar el secret `SETUP_SECRET`** en el Worker (`wrangler secret put SETUP_SECRET`) — un string random que solo Vaneh/Ger conocen, para poder crear las 2 cuentas iniciales sin que nadie más pueda crear cuentas.
+3. **Disparar el deploy** (`workflow_dispatch` en GitHub Actions, mismo mecanismo manual que `cosmart-workers`).
+4. **Crear las 2 cuentas** llamando a `POST /api/setup` una vez por persona (con `rol: "admin"` para ambas) — nunca commitear las contraseñas reales a git.
+5. **Apuntar el dominio** `ia.cosmart.com.ar` al Worker `cosmart-ia` (custom domain en Cloudflare).
+6. Revisar el branding una vez desplegado (ver nota de arriba, no confirmado por Vaneh todavía).
+
+**Siguiente paso**: seguir en paralelo con la prueba comparativa de modelos (demos gratis) mientras se van resolviendo estos pendientes de infraestructura.
 
 ## Qué es esto
 
