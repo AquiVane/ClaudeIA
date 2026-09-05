@@ -62,6 +62,20 @@ Confirmado por Vaneh: nada de servicio de terceros ($400-1600/mes es descartado 
 
 **Siguiente paso actualizado**: correr la prueba comparativa de los 3 modelos candidatos en Runpod (calidad real + costo real), en paralelo con el scaffolding de login (Vaneh/Ger) + subida de fotos/video/audio a R2.
 
+## Novedades 05/09 (sexta vuelta) — Vaneh no tiene plata ahora mismo: prueba gratis con demos públicas
+
+Vaneh avisó que no tiene plata disponible ahora para pagar Runpod y correr la prueba comparativa. Solución encontrada: **los 3 modelos candidatos ya tienen demo pública gratis online, sin necesidad de alquilar GPU**:
+
+- **Wan2.2-S2V**: demo oficial de Alibaba en `huggingface.co/spaces/Wan-AI/Wan2.2-S2V` — subís foto + audio, genera el video ahí mismo.
+- **daVinci-MagiHuman**: demo oficial en `huggingface.co/spaces/SII-GAIR/daVinci-MagiHuman`.
+- **HunyuanVideo-Avatar**: **no tiene demo oficial de Tencent** — solo espacios de la comunidad (ej. `rahul7star/Hunyuan-Avatar`, `VIDraft/Wan2GP`), que son de terceros no oficiales. Recomendado probarlo con una foto de prueba (no la cara real de Vaneh/Ger) si se usa, o dejarlo afuera de esta primera ronda de comparación.
+
+**Aclaración importante para no confundir resultados**: estas demos muestran el modelo **genérico, sin el fine-tuning con las fotos propias de cada perfil** — el resultado final del proyecto (una vez hecho el ajuste fino) debería ser mejor que lo que se vea acá. Sirve igual para descartar de entrada el que se vea peor o más deforme.
+
+También encontrado como opción para cuando haga falta probar código propio (no solo las demos): **Modal.com da $30/mes gratis en crédito de cómputo** (~12hs de GPU clase A100), sin poner un peso.
+
+**Pendiente**: que Vaneh (o Ger) prueben Wan2.2-S2V y daVinci-MagiHuman con la misma foto/audio en las demos oficiales y comparen resultado, antes de gastar nada en Runpod.
+
 ## Qué es esto
 
 Una IA propia de COSMART para generar videos a partir de fotos, audios y guiones — pensada para resolver un problema puntual de Vaneh: no tiene tiempo para crear contenido, y las herramientas que probó o la hacen mal (le cambian la cara) o son inaccesibles en precio. Ella la describe como su proyecto más grande desde que empezó, con expectativa fuerte de impacto económico.
