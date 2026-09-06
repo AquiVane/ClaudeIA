@@ -130,6 +130,18 @@ Se iteró en vivo con Vaneh sobre una vista previa publicada como Artifact (logi
 
 **Todavía sin hacer**: nada del resto de la lista de pendientes de infraestructura (secrets, deploy, cuentas, dominio) — el foco de esta vuelta fue 100% el diseño visual, ya cerrado.
 
+**Workflow de deploy actualizado**: `.github/workflows/deploy.yml` ahora, después de `wrangler deploy`, corre un paso extra (`echo "$SETUP_SECRET" | npx wrangler secret put SETUP_SECRET`) que carga el secret directo en el Worker — así Vaneh no tiene que tocar la terminal de Cloudflare a mano, solo cargar 3 secrets en GitHub (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `SETUP_SECRET`) y avisar para que se dispare el workflow. **Checklist de deploy sigue pendiente, esperando que Vaneh cargue esos 3 secrets.**
+
+## Novedades 06/09 (segunda vuelta) — Decisión de producto: aprendizaje a partir del feedback de cada video generado
+
+Vaneh planteó una idea a partir de una frustración real con Social Boots (no te deja dar indicaciones cuando algo sale mal) — preguntó si se podría plantear como "entrenamiento" para que la IA conozca mejor el perfil propio con el uso. **Confirmado que sí, con el siguiente diseño**:
+
+- **Los videos que el usuario APRUEBA** (los usa/le gustan) se guardan como ejemplo positivo nuevo del perfil. Cada tanto (no después de cada video individual — sería carísimo en cómputo hacerlo por video) se re-ajusta el modelo de ese perfil con todo lo aprobado acumulado, así el perfil mejora solo cuantos más videos buenos se generan y usan.
+- **Los videos que el usuario RECHAZA** (con motivo: ej. "la boca se ve rara", "la voz no soy yo") NO se usan para reentrenar directamente — un ejemplo negativo no le enseña al modelo cómo hacerlo bien, le falta el contraejemplo positivo. Sirven como **diagnóstico**: detectar patrones (ej. "siempre falla con fotos de perfil de costado") para mejorar la guía de onboarding o detectar condiciones problemáticas.
+- Esto es la continuación natural del preview de frames antes de generar el video completo (ya decidido antes): cachar el error lo más barato y temprano posible en el proceso, en vez de que el error llegue al usuario al final sin poder hacer nada, como le pasa con Social Boots.
+- **Nuevo criterio para elegir el modelo base** (sumar a la prueba comparativa pendiente entre Wan2.2-S2V / HunyuanVideo-Avatar / daVinci-MagiHuman): tiene que soportar ajuste incremental barato por perfil (ej. adaptadores tipo LoRA), para que re-entrenar con lo aprobado sea viable en costo y no obligue a reentrenar el modelo completo cada vez.
+- **No implementado todavía** — es una decisión de diseño para cuando se construya el pipeline de generación real, no bloquea el arranque actual (login + subida de archivos).
+
 ## Qué es esto
 
 Una IA propia de COSMART para generar videos a partir de fotos, audios y guiones — pensada para resolver un problema puntual de Vaneh: no tiene tiempo para crear contenido, y las herramientas que probó o la hacen mal (le cambian la cara) o son inaccesibles en precio. Ella la describe como su proyecto más grande desde que empezó, con expectativa fuerte de impacto económico.
