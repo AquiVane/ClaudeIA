@@ -86,7 +86,7 @@ Se investigó el código real (no se inventó nada):
 - **MPG**: paleta verde-menta/turquesa (`--verde:#3EC0A8`, fondo oscuro `#0d2e29`, fondo claro `#f0faf8`), tipografías **DM Sans** (texto) + **Bricolage Grotesque** (títulos/botones), botones redondeados — estética "producto de IA moderno".
 - **COSMART madre** (cosmart.com.ar, ej. `auditoria-de-marketing.html`): paleta navy (`#091C47`/`#0D2B6B`) + celeste (`#3A8FC7`) + rojo (`#E02020`), más corporativo.
 
-**Decisión aplicada**: estructura/tipografías/botones redondeados de MPG (DM Sans + Bricolage Grotesque) + navy/celeste de COSMART como color principal (`--navy:#091C47`, `--navy2:#0D2B6B`, `--celeste:#3A8FC7`) en vez del verde-menta de MPG, con el rojo de COSMART (`#E02020`) reservado solo como acento de error/alerta. **No confirmado explícitamente por Vaneh todavía** — se avisó que se iba a construir así y se sigue esperando feedback una vez que lo vea armado (más fácil opinar sobre algo real que sobre texto). Si pide cambios de paleta, es la primera cosa a revisar.
+**Decisión inicial** (superada, ver "Novedades 06/09" más abajo con la paleta final confirmada): estructura/tipografías/botones redondeados de MPG (DM Sans + Bricolage Grotesque) + navy/celeste de COSMART como color principal, con el rojo de COSMART reservado solo como acento de error/alerta.
 
 ### Recursos de Cloudflare creados (vía API, cuenta real de Vaneh)
 
@@ -112,9 +112,23 @@ No se creó base de datos D1 — se decidió usar solo KV (mismo patrón ya prob
 3. **Disparar el deploy** (`workflow_dispatch` en GitHub Actions, mismo mecanismo manual que `cosmart-workers`).
 4. **Crear las 2 cuentas** llamando a `POST /api/setup` una vez por persona (con `rol: "admin"` para ambas) — nunca commitear las contraseñas reales a git.
 5. **Apuntar el dominio** `ia.cosmart.com.ar` al Worker `cosmart-ia` (custom domain en Cloudflare).
-6. Revisar el branding una vez desplegado (ver nota de arriba, no confirmado por Vaneh todavía).
+6. ~~Revisar el branding una vez desplegado~~ — **hecho, ver "Novedades 06/09" abajo, ya confirmado por Vaneh y aplicado a los archivos reales.**
 
-**Siguiente paso**: seguir en paralelo con la prueba comparativa de modelos (demos gratis) mientras se van resolviendo estos pendientes de infraestructura.
+**Siguiente paso**: seguir en paralelo con la prueba comparativa de modelos (demos gratis) mientras se van resolviendo estos pendientes de infraestructura (puntos 1-5 arriba, ninguno hecho todavía).
+
+## Novedades 06/09 — Branding final CONFIRMADO por Vaneh, ya aplicado a `login.html`/`perfil.html`
+
+Se iteró en vivo con Vaneh sobre una vista previa publicada como Artifact (login + perfil con datos de ejemplo) hasta llegar a la combinación que le encantó. **Paleta final, ya en el código real:**
+
+- `--navy: #0a1a40` — el navy MÁS OSCURO que existe en el código real de COSMART (no el que se había usado al principio, `#091C47`; este es más oscuro todavía, sacado de los gradientes de sección de `cosmart/auditoria-de-marketing.html`). Fondo general de las pantallas y del header de "Mi perfil".
+- `--verde: #62B89F` / `--verde-d: #408E77` (más oscuro, para texto) — **el verde real de MPG NO es el `#3EC0A8` de las variables CSS del sitio** (eso es solo un acento de UI) — es el color del **logo real** de MPG (el pin con la "G"), extraído directo del PNG embebido en `mpg/index.html`. Usado en: botón "Ingresar", isotipo, título "COSMART IA", labels, texto de los inputs, headings de las tarjetas, contador de archivos.
+- `--celeste-pastel: #D3E6F0` — celeste bien clarito derivado del celeste real de COSMART (`#3A8FC7`), usado como fondo de: la tarjeta completa del login (no solo los inputs — primer intento equivocado), y las 3 tarjetas de "Mi perfil" (intro + fotos/videos/audios).
+- Los inputs del login son blancos (`#fff`) con texto verde-d — quedan como elemento diferenciado dentro de la tarjeta celeste.
+- **Footer nuevo** (login no lo tiene, solo "Mi perfil"): fondo `#06122e` (más oscuro incluso que el `--navy`, tomado de la barra de "vista previa" del mockup), con el logo real de COSMART (`img/logo-cosmart.png`) + link a `www.cosmart.com.ar`.
+
+**Proceso de esta sesión, por si se repite el patrón**: Vaneh corrige de a un elemento por vez viendo la vista previa real (nunca a ciegas por descripción de texto) — cuando algo "no le cierra", mejor preguntarle con opciones concretas (¿esto, esto, o esto?) que adivinar de nuevo, ya se erró 2-3 veces seguidas en esta sesión antes de acertar con preguntas puntuales. Cuando dice "está en el repositorio", literal hay que ir a buscar el valor exacto en el código/logo real (así se encontró el verde correcto de MPG y el navy más oscuro de COSMART) — nunca inventar un tono aproximado.
+
+**Todavía sin hacer**: nada del resto de la lista de pendientes de infraestructura (secrets, deploy, cuentas, dominio) — el foco de esta vuelta fue 100% el diseño visual, ya cerrado.
 
 ## Qué es esto
 
