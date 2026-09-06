@@ -10,10 +10,14 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Bricolage+Grotesque:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #091C47;
+    --navy: #0a1a40;
     --navy2: #0D2B6B;
+    --verde: #62B89F;
+    --verde-d: #408E77;
+    --verde-claro: #D7E6E2;
     --celeste: #3A8FC7;
     --celeste-claro: #cfe4f4;
+    --celeste-pastel: #D3E6F0;
     --rojo: #E02020;
     --texto: #F5F8FC;
     --texto-tenue: rgba(245,248,252,0.6);
@@ -60,39 +64,40 @@
   }
   main { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
   .intro {
-    background: #fff;
+    background: var(--celeste-pastel);
     border-radius: 14px;
     padding: 18px 20px;
     margin-bottom: 22px;
-    border: 1px solid #e1e9f2;
+    border: 1px solid rgba(9,28,71,0.08);
   }
   .intro h2 {
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 1.05rem;
     margin: 0 0 8px;
-    color: var(--navy2);
+    color: var(--verde-d);
   }
   .intro p { margin: 0; font-size: 0.9rem; line-height: 1.5; color: #4a5a75; }
 
   .seccion {
-    background: #fff;
+    background: var(--celeste-pastel);
     border-radius: 14px;
     padding: 18px 20px;
     margin-bottom: 18px;
-    border: 1px solid #e1e9f2;
+    border: 1px solid rgba(9,28,71,0.08);
   }
   .seccion-header { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
   .seccion h3 {
     font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 1rem;
     margin: 0;
-    color: var(--navy2);
+    color: var(--verde-d);
   }
-  .seccion .contador { font-size: 0.8rem; color: var(--celeste); font-weight: 600; }
+  .seccion .contador { font-size: 0.8rem; color: var(--verde-d); font-weight: 600; }
   .seccion .ayuda { font-size: 0.82rem; color: #6b7a94; margin: 0 0 14px; line-height: 1.5; }
 
   .subir-caja {
-    border: 2px dashed #c7d6ea;
+    background: #fff;
+    border: 2px dashed var(--verde-claro);
     border-radius: 10px;
     padding: 18px;
     text-align: center;
@@ -100,9 +105,9 @@
     cursor: pointer;
     transition: border-color .15s, background .15s;
   }
-  .subir-caja:hover, .subir-caja.arrastrando { border-color: var(--celeste); background: #f0f7fc; }
+  .subir-caja:hover, .subir-caja.arrastrando { border-color: var(--verde); background: #f0faf7; }
   .subir-caja input { display: none; }
-  .subir-caja .txt { font-size: 0.88rem; color: var(--celeste); font-weight: 600; }
+  .subir-caja .txt { font-size: 0.88rem; color: var(--verde-d); font-weight: 600; }
   .subir-caja .txt2 { font-size: 0.78rem; color: #8695ad; margin-top: 4px; }
 
   .grid-archivos {
@@ -122,7 +127,7 @@
     justify-content: center;
   }
   .item img, .item video { width: 100%; height: 100%; object-fit: cover; }
-  .item .icono-tipo { font-size: 1.8rem; color: var(--celeste); }
+  .item .icono-tipo { font-size: 1.8rem; color: var(--verde-d); }
   .item .nombre-audio {
     font-size: 0.68rem;
     color: #4a5a75;
@@ -148,6 +153,23 @@
     justify-content: center;
   }
   .vacio { font-size: 0.85rem; color: #9aa8bf; padding: 10px 0; }
+
+  footer {
+    background: #06122e;
+    color: rgba(245,248,252,0.6);
+    font-size: 0.78rem;
+    text-align: center;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  footer img { height: 22px; width: auto; }
+  footer .separador { opacity: 0.5; }
+  footer a { color: rgba(245,248,252,0.75); text-decoration: none; }
+  footer a:hover { color: var(--verde); text-decoration: underline; }
 
   @media (max-width: 480px) {
     header { padding: 12px 14px; }
@@ -216,6 +238,12 @@
       <div class="grid-archivos" id="grid-audio"></div>
     </section>
   </main>
+
+  <footer>
+    <img src="img/logo-cosmart.png" alt="COSMART">
+    <span class="separador">·</span>
+    <a href="https://www.cosmart.com.ar" target="_blank" rel="noopener">www.cosmart.com.ar</a>
+  </footer>
 
 <script>
 const API = location.origin;
